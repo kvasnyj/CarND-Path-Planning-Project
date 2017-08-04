@@ -1,0 +1,4 @@
+/home/kvasnyj/clion/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/cmake-build-debug
