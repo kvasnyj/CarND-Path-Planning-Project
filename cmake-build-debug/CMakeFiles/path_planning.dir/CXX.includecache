@@ -772,6 +772,16 @@ lapacke_mangling.h
 
 /home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/Eigen-3.3/Eigen/src/plugins/MatrixCwiseUnaryOps.h
 
+/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/MathHelper.cpp
+MathHelper.h
+/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/MathHelper.h
+math.h
+-
+
+/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/MathHelper.h
+math.h
+-
+
 /home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/json.hpp
 algorithm
 -
@@ -851,18 +861,20 @@ json.hpp
 /home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/json.hpp
 planner.h
 /home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/planner.h
+MathHelper.h
+/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/MathHelper.h
 
 /home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/planner.cpp
 vector
 -
 planner.h
 /home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/planner.h
+MathHelper.h
+/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/MathHelper.h
 math.h
 -
 
 /home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/planner.h
 vector
--
-math.h
 -
 

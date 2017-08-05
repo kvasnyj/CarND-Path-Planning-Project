@@ -123,6 +123,33 @@ path_planning/fast:
 	$(MAKE) -f CMakeFiles/path_planning.dir/build.make CMakeFiles/path_planning.dir/build
 .PHONY : path_planning/fast
 
+src/MathHelper.o: src/MathHelper.cpp.o
+
+.PHONY : src/MathHelper.o
+
+# target to build an object file
+src/MathHelper.cpp.o:
+	$(MAKE) -f CMakeFiles/path_planning.dir/build.make CMakeFiles/path_planning.dir/src/MathHelper.cpp.o
+.PHONY : src/MathHelper.cpp.o
+
+src/MathHelper.i: src/MathHelper.cpp.i
+
+.PHONY : src/MathHelper.i
+
+# target to preprocess a source file
+src/MathHelper.cpp.i:
+	$(MAKE) -f CMakeFiles/path_planning.dir/build.make CMakeFiles/path_planning.dir/src/MathHelper.cpp.i
+.PHONY : src/MathHelper.cpp.i
+
+src/MathHelper.s: src/MathHelper.cpp.s
+
+.PHONY : src/MathHelper.s
+
+# target to generate assembly for a file
+src/MathHelper.cpp.s:
+	$(MAKE) -f CMakeFiles/path_planning.dir/build.make CMakeFiles/path_planning.dir/src/MathHelper.cpp.s
+.PHONY : src/MathHelper.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... path_planning"
+	@echo "... src/MathHelper.o"
+	@echo "... src/MathHelper.i"
+	@echo "... src/MathHelper.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

@@ -84,6 +84,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/MathHelper.cpp">
+			<Option target="path_planning"/>
+		</Unit>
+		<Unit filename="/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/MathHelper.h">
+			<Option target="path_planning"/>
+		</Unit>
 		<Unit filename="/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/main.cpp">
 			<Option target="path_planning"/>
 		</Unit>

@@ -9,6 +9,7 @@
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
 #include "planner.h"
+#include "MathHelper.h"
 
 using namespace std;
 
@@ -69,13 +70,51 @@ int NextWaypoint(double x, double y, double theta, vector<double> maps_x, vector
 
 	double angle = abs(theta-heading);
 
-	if(angle > planner::pi()/4)
+	if(angle > MathHelper::pi()/4)
 	{
 		closestWaypoint++;
 	}
 
 	return closestWaypoint;
 
+}
+
+
+vector<double> getCarXY(double car_x, double car_y, double theta, double wx, double wy) {
+    vector<double> results;
+
+    // convert to local coordinates
+    float deltax = (wx - car_x);
+    float deltay = (wy - car_y);
+    results.push_back(deltax*cos(theta) + deltay*sin(theta));
+    results.push_back(-deltax*sin(theta) + deltay*cos(theta));
+    return results;
+}
+
+vector<vector<double>> getCarWPSegement(double car_x, double car_y, double car_yaw, double d, vector<double> maps_x, vector<double> maps_y, vector<double> maps_dx, vector<double> maps_dy) {
+    vector<double> wpx;
+    vector<double> wpy;
+    vector<vector<double>> results;
+    double theta = MathHelper::deg2rad(car_yaw);
+
+    int closestWaypoint = ClosestWaypoint(car_x, car_y, maps_x, maps_y);
+    int previous = closestWaypoint - 6;
+    if (previous < 0) {
+        previous += maps_x.size();
+    }
+    cout << "waypoints: ";
+    for (int i = 0; i < 25; i++) {
+        int next = (previous+i)%maps_x.size();
+        vector<double> localxy = getCarXY(car_x, car_y, theta, (maps_x[next]+d*maps_dx[next]), (maps_y[next]+d*maps_dy[next]));
+        cout << next << ":" << localxy[0] << ":" << localxy[1] << ",";
+        wpx.push_back(localxy[0]);
+        wpy.push_back(localxy[1]);
+    }
+    cout << endl;
+    results.push_back(wpx);
+    results.push_back(wpy);
+
+    return results;
 }
 
 // Transform from Cartesian x,y coordinates to Frenet s,d coordinates
@@ -146,7 +185,7 @@ vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> m
 	double seg_x = maps_x[prev_wp]+seg_s*cos(heading);
 	double seg_y = maps_y[prev_wp]+seg_s*sin(heading);
 
-	double perp_heading = heading-planner::pi()/2;
+	double perp_heading = heading-MathHelper::pi()/2;
 
 	double x = seg_x + d*cos(perp_heading);
 	double y = seg_y + d*sin(perp_heading);
@@ -239,7 +278,17 @@ int main() {
 
 
             //straight(next_x_vals, next_y_vals, car_x, car_y, car_yaw);
-            pl.circle(next_x_vals, next_y_vals, previous_path_x, previous_path_y, car_x, car_y, car_yaw);
+            //pl.circle(next_x_vals, next_y_vals, previous_path_x, previous_path_y, car_x, car_y, car_yaw);
+
+            vector<double> telemetry(6);
+            telemetry[0] = car_x;
+            telemetry[1] = car_y;
+            telemetry[2] = car_s;
+            telemetry[3] = car_d;
+            telemetry[4] = car_yaw;
+            telemetry[5] = car_speed;
+
+            pl.FollowingWP(next_x_vals, next_y_vals, previous_path_x, previous_path_y, telemetry);
 
             // TODO END -----------------------------------------------------------------
 
