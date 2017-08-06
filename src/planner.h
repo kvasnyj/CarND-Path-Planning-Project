@@ -29,11 +29,6 @@ public:
     double max_speed;
     double min_speed;
 
-    double max_speed_delta;
-    double min_speed_delta;
-    double dist_adj;
-    double dist_threshold;
-
     double path_plan_seconds;
     double delta_t;
 
@@ -62,7 +57,7 @@ public:
 
     vector<double> computeMinimumJerk(vector<double> start, vector<double> end, double max_time, double time_inc);
 
-    double distanceToClosestCar(double car_s, int car_l, bool inFront);
+    vector<double> distanceToClosestCar(double car_s, int car_l, bool inFront);
 
     double costOfLaneChange(double car_s, int car_l, int direction);
 

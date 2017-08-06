@@ -24,12 +24,7 @@ planner::planner() {
     max_speed = 20.0;
     min_speed = 10.0;
 
-    dist_adj = 4;
-    dist_threshold = 20;
-    max_speed_delta = 4;
-    min_speed_delta = -4;
-
-    path_plan_seconds = 1.5;
+    path_plan_seconds = 2.5;
     delta_t = 0.02;
 
     i_x = 0;
@@ -43,8 +38,7 @@ planner::planner() {
 
 void planner::FollowingWP(vector<double> &next_x_vals, vector<double> &next_y_vals, vector<double> &previous_path_x,
                           vector<double> &previous_path_y, vector<double> &telemetry,
-                          vector<vector<double> > sensor_fusion)
-{
+                          vector<vector<double> > sensor_fusion) {
     telemetry[planner::i_lane] = wp.D2Lane(telemetry[i_d]);
 
     int path_size = previous_path_x.size();
@@ -54,7 +48,8 @@ void planner::FollowingWP(vector<double> &next_x_vals, vector<double> &next_y_va
     if (path_size == 0) {
         fill_other_cars(sensor_fusion);
 
-        setpoints = determineNewStraightCourseSetpoints(telemetry[i_s], telemetry[planner::i_lane], telemetry[planner::i_speed]);
+        setpoints = determineNewStraightCourseSetpoints(telemetry[i_s], telemetry[planner::i_lane],
+                                                        telemetry[planner::i_speed]);
         jerk_result jerk = computeMinimumJerkMapPath(setpoints,
                                                      wp.map_waypoints_s,
                                                      wp.map_waypoints_x,
@@ -97,6 +92,7 @@ void planner::FollowingWP(vector<double> &next_x_vals, vector<double> &next_y_va
         next_x_vals = path_x;
         next_y_vals = path_y;
     } else {
+
         next_x_vals = previous_path_x;
         next_y_vals = previous_path_y;
     }
@@ -122,19 +118,26 @@ void planner::fill_other_cars(vector<vector<double>> sensor_fusion) {
     }
 }
 
-double planner::distanceToClosestCar(double car_s, int car_l, bool inFront) {
-    double closest = wp.max_s;
+vector<double> planner::distanceToClosestCar(double car_s, int car_l, bool inFront) {
+    double closest = 100;
+    double speed = 0;
     for (int i = 0; i < other_cars.size(); i++) {
         if (other_cars[i][i_lane] == car_l) {
-            double diff = 0;
+            double diff = 0.0;
             if (inFront) diff = other_cars[i][i_s] - car_s;
             else diff = car_s - other_cars[i][i_s];
-            if (diff > 0.0 && diff < closest) {
+
+            if (diff >= 0.0 && diff < closest) {
                 closest = diff;
+                speed = other_cars[i][i_speed];
             }
         }
     }
-    return closest;
+
+    vector<double> result(2);
+    result[0] = closest;
+    result[1] = speed;
+    return result;
 }
 
 double planner::costOfLaneChange(double car_s, int car_l, int direction) {
@@ -143,8 +146,8 @@ double planner::costOfLaneChange(double car_s, int car_l, int direction) {
         return cost_max;
     }
 
-    double front_dist = distanceToClosestCar(car_s, new_lane, true);
-    double behind_dist = distanceToClosestCar(car_s, new_lane, false);
+    double front_dist = distanceToClosestCar(car_s, new_lane, true)[0];
+    double behind_dist = distanceToClosestCar(car_s, new_lane, false)[0];
     if (front_dist != 0.0 && behind_dist != 0.0) {
         return cost_lane_change_front / front_dist + cost_lane_change_rear / behind_dist;
     }
@@ -152,7 +155,8 @@ double planner::costOfLaneChange(double car_s, int car_l, int direction) {
 }
 
 double planner::costOfStraightCourse(double car_s, int car_l) {
-    double front_dist = distanceToClosestCar(car_s, car_l, true);
+    double front_dist = distanceToClosestCar(car_s, car_l, true)[0];
+    if (front_dist < 8)return 0; //if we too close to car, go straight
     if (front_dist != 0.0) {
         return cost_straight / front_dist;
     }
@@ -163,9 +167,6 @@ int planner::lowestCostAction(double car_s, int car_l) {
     double left_cost = costOfLaneChange(car_s, car_l, -1);
     double keep_cost = costOfStraightCourse(car_s, car_l);
     double right_cost = costOfLaneChange(car_s, car_l, 1);
-
-    // TODO
-    std::cout << "costs: " << left_cost << " - " << keep_cost << " - " << right_cost << endl;
 
     map<double, int> cost_map = {{left_cost,  -1},
                                  {keep_cost,  0},
@@ -182,31 +183,27 @@ vector<double> planner::determineNewCourseSetpoints(double car_s, int car_l, dou
     setpoint[0] = car_s;
     setpoint[1] = car_speed;
     setpoint[2] = car_s + path_plan_seconds * car_speed;
-    setpoint[3] = car_speed;
+    setpoint[3] = car_speed*0.9;
     setpoint[4] = car_l;
     setpoint[5] = car_l + direction;
 
     return setpoint;
 }
 
-vector<double> planner::determineNewStraightCourseSetpoints(double car_s, int car_l, double car_speed)
-{
-    double car_in_front_dist = distanceToClosestCar(car_s, car_l, true);
-    double speed_delta = dist_adj * (car_in_front_dist - dist_threshold);
-
-    if (speed_delta > max_speed_delta)
-        speed_delta = max_speed_delta;
-
-    if (speed_delta < min_speed_delta)
-        speed_delta = min_speed_delta;
-
+vector<double> planner::determineNewStraightCourseSetpoints(double car_s, int car_l, double car_speed) {
     double speed_start = car_speed;
     if (speed_start > max_speed) speed_start = max_speed;
 
-    double speed_end = speed_start + speed_delta;
+    vector<double> car_in_front = distanceToClosestCar(car_s, car_l, true);
+    double speed_end = speed_start * 1.5;
+    if (speed_end < min_speed) speed_end = min_speed;
+
+    if (car_in_front[0] < 25)
+        speed_end = car_in_front[1];
+    else if (car_in_front[0] < 20)
+        speed_end = car_in_front[1] * 0.7;
     if (speed_end > max_speed) speed_end = max_speed;
 
-    if (speed_end < min_speed) speed_end = min_speed;
 
     vector<double> setpoint(6);
     setpoint[0] = car_s;
