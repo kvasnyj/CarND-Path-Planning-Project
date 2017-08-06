@@ -156,7 +156,6 @@ double planner::costOfLaneChange(double car_s, int car_l, int direction) {
 
 double planner::costOfStraightCourse(double car_s, int car_l) {
     double front_dist = distanceToClosestCar(car_s, car_l, true)[0];
-    if (front_dist < 8)return 0; //if we too close to car, go straight
     if (front_dist != 0.0) {
         return cost_straight / front_dist;
     }
@@ -198,11 +197,13 @@ vector<double> planner::determineNewStraightCourseSetpoints(double car_s, int ca
     double speed_end = speed_start * 1.5;
     if (speed_end < min_speed) speed_end = min_speed;
 
-    if (car_in_front[0] < 20)
+    if (car_in_front[0] < 5)
+        speed_end = speed_start/2;
+    if (car_in_front[0] < 15)
         speed_end = car_in_front[1] * 0.7;
     else  if (car_in_front[0] < 25)
         speed_end = car_in_front[1];
-    
+
     if (speed_end > max_speed) speed_end = max_speed;
 
 
