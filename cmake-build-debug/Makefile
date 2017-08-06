@@ -204,6 +204,33 @@ src/planner.cpp.s:
 	$(MAKE) -f CMakeFiles/path_planning.dir/build.make CMakeFiles/path_planning.dir/src/planner.cpp.s
 .PHONY : src/planner.cpp.s
 
+src/waypoints.o: src/waypoints.cpp.o
+
+.PHONY : src/waypoints.o
+
+# target to build an object file
+src/waypoints.cpp.o:
+	$(MAKE) -f CMakeFiles/path_planning.dir/build.make CMakeFiles/path_planning.dir/src/waypoints.cpp.o
+.PHONY : src/waypoints.cpp.o
+
+src/waypoints.i: src/waypoints.cpp.i
+
+.PHONY : src/waypoints.i
+
+# target to preprocess a source file
+src/waypoints.cpp.i:
+	$(MAKE) -f CMakeFiles/path_planning.dir/build.make CMakeFiles/path_planning.dir/src/waypoints.cpp.i
+.PHONY : src/waypoints.cpp.i
+
+src/waypoints.s: src/waypoints.cpp.s
+
+.PHONY : src/waypoints.s
+
+# target to generate assembly for a file
+src/waypoints.cpp.s:
+	$(MAKE) -f CMakeFiles/path_planning.dir/build.make CMakeFiles/path_planning.dir/src/waypoints.cpp.s
+.PHONY : src/waypoints.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -222,6 +249,9 @@ help:
 	@echo "... src/planner.o"
 	@echo "... src/planner.i"
 	@echo "... src/planner.s"
+	@echo "... src/waypoints.o"
+	@echo "... src/waypoints.i"
+	@echo "... src/waypoints.s"
 .PHONY : help
 
 

@@ -99,6 +99,12 @@
 		<Unit filename="/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/planner.h">
 			<Option target="path_planning"/>
 		</Unit>
+		<Unit filename="/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/waypoints.cpp">
+			<Option target="path_planning"/>
+		</Unit>
+		<Unit filename="/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/src/waypoints.h">
+			<Option target="path_planning"/>
+		</Unit>
 		<Unit filename="/home/kvasnyj/Dropbox/P1. Path Planning Project/CarND-Path-Planning-Project/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
