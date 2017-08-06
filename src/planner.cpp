@@ -198,10 +198,11 @@ vector<double> planner::determineNewStraightCourseSetpoints(double car_s, int ca
     double speed_end = speed_start * 1.5;
     if (speed_end < min_speed) speed_end = min_speed;
 
-    if (car_in_front[0] < 25)
-        speed_end = car_in_front[1];
-    else if (car_in_front[0] < 20)
+    if (car_in_front[0] < 20)
         speed_end = car_in_front[1] * 0.7;
+    else  if (car_in_front[0] < 25)
+        speed_end = car_in_front[1];
+    
     if (speed_end > max_speed) speed_end = max_speed;
 
 
