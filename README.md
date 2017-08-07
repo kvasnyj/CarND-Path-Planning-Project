@@ -18,3 +18,7 @@ All logic regarding creates new waypoints I realized in separate planner class w
 * lowestCostAction - take action with the lowest cost.
 * determineNewCourseSetpoints and determineNewStraightCourseSetpoints - define new coordinates and speed after maneuver. In the case of changing lane finale speed slightly less that start speed. In the case of going straight final speed dependence from the speed of the car ahead. 
 * computeMinimumJerkMapPath - generate path with minimum jerk 
+
+### Further improvements 
+* Prediction of lane changing for other cars. Now I predict the only position for going straights cars. 
+* Better algorithm for "following car" case.  
